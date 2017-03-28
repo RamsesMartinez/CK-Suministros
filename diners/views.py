@@ -174,18 +174,21 @@ def get_diners_per_hour():
     logs = get_access_logs_today()
 
     while start_hour <= hours_to_count:
-
         hour = {            
             'count': None,
         }
-
-        for log in logs:
-            datetime = str(log.access_to_room)
-            date,time = datetime.split(" ")    
-            if(time.startswith("0"+str(start_hour))):
+        for log in logs:            
+            datetime = str(log.access_to_room)            
+            print(datetime)
+            date,time = datetime.split(" ")   
+            if(time.startswith("0")):
+                hour_str = "0"+str(start_hour)
+            else:
+                hour_str = str(start_hour)   
+            if(time.startswith(hour_str)):                
                 customter_count += 1 
             hour['count'] = customter_count
-
+            
         hours_list.append(hour)        
         customter_count = 0
         start_hour += 1
@@ -212,7 +215,7 @@ def get_diners_actual_week():
             
             logs = AccessLog.objects.filter(access_to_room__range=[start_datetime(days_to_count), end_datetime(days_to_count)])
 
-            for log in logs:                
+            for log in logs: 
                 total_entries += 1;
 
             day_object['entries'] = str(total_entries)
