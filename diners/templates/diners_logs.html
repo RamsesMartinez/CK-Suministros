@@ -9,6 +9,54 @@
         <div class="input-group-addon"><i class="material-icons">search</i></div>
         <input type="text" class="form-control" id="input-diners-search" placeholder="Buscar Comensal por ID">
       </div>
+<<<<<<< HEAD
+<<<<<<< HEAD
+    </div>    
+  </div>
+  <div class="row">
+      <div class="col-xs-12 col-lg-6">
+        <div class="canvas-holder">
+          <canvas id="dinners_by_day"></canvas>
+        </div>
+       </div>
+       <div class="col-xs-12 col-lg-6">
+        <div class="canvas-holder">
+          <canvas id="dinners_by_hour"></canvas>
+        </div>
+       </div>         
+    </div>   
+  <div class="row">
+      <div class="col-xs-6 mt-1 mb-1">
+        <h3 class="text-xs-left">Comensales hasta hoy: <span class="badge badge-blue">{{ total_diners }}</span></h3>
+      </div>
+      <div class="col-xs-6 mt-1 mb-1">
+        <h3 class="text-xs-right">Comensales de hoy: <span class="badge badge-success">{{ total_diners_today }}</span></h3>
+      </div>      
+    </div>
+  <div class="row">
+    <table class="table" id="myTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th>RFID</th>
+          <th>SAP</th>
+          <th>Nombre</th>
+          <th>Fecha de Acceso</th>                 
+        </tr>
+      </thead>      
+      <tbody>      
+        {%for diner in diners %}        
+        <tr>       
+          <th>{{ diner.RFID }}</th> 
+          <td>{{ diner.diner.employee_number }}</td>          
+          <td>{{ diner.diner.name }}</td>          
+          <td>{{ diner.access_to_room }}</td>
+        </tr>      
+        {% endfor %}        
+      </tbody>
+    </table>
+=======
+=======
+>>>>>>> 94c27182d346e94271a4610a015aaecf44204d75
     </div>
     <div class="col-xs-12 col-lg-8 text-xs-right  inputs-container">
       <div class="row">
@@ -45,7 +93,11 @@
         <span class="btn-reports d-flex align-items-center"><i class="material-icons">file_download</i>Generar Reporte</span>
       </button>
     </div>
+<<<<<<< HEAD
+>>>>>>> 918f7a1d4c3dc911d8f94a0e0e122f28470c3e6a
+=======
 
+>>>>>>> 94c27182d346e94271a4610a015aaecf44204d75
   </div>
   <div class="row">
     <div class="col-xs-12">
@@ -78,12 +130,22 @@
 {% endblock %} 
 
 {% block javascript %}
+<<<<<<< HEAD
+<<<<<<< HEAD
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+=======
+=======
 
+>>>>>>> 94c27182d346e94271a4610a015aaecf44204d75
 <script src="{% static 'js/Chart.bundle.min.js' %}" defer></script>
 <script src="{% static 'js/papaparse.min.js' %}" defer></script>
 <script src="{% static 'js/blob.js' %}" defer></script>
 <script src="{% static 'js/fileSaver.min.js' %}" defer></script>
 
+<<<<<<< HEAD
+>>>>>>> 918f7a1d4c3dc911d8f94a0e0e122f28470c3e6a
+=======
+>>>>>>> 94c27182d346e94271a4610a015aaecf44204d75
 <script type="text/javascript" charset="utf-8" async>
   $(function() {
     var ctx_diners_hour = document.getElementById("dinners_by_hour");
@@ -411,6 +473,65 @@
     });
 
 
+    function fill_dates_range_form() {
+      var dates_range_form = $(this).find('#dt-year');
+      var selected_year;
+      $.each(dates_range, function(index, item) {
+        $('#dates-range-form').find('#dt-year').append(
+          "<option value=" + item.year + ">" + item.year + "</option>"
+        );
+      });
+
+
+      /**
+       * Receives a datetime with format from python.
+       * Returns an hour converted into 24-hours format: hh:mm ith Timezone +06:00
+       */
+      function convert_datetime_to_hour(original_datetime) {
+        hour_formated = original_datetime.split('T')[1].split('.')[0].substr(0, 5);
+        return hour_formated;
+      }
+
+      function convert_date_to_str(date) {
+        months = {
+          1: 'Ene',
+          2: 'Feb',
+          3: 'Mar',
+          4: 'Abr',
+          5: 'May',
+          6: 'Jun',
+          7: 'Jul',
+          8: 'Ago',
+          9: 'Sep',
+          10: 'Oct',
+          11: 'Nov',
+          12: 'Dic',
+        }
+        date = date.split('-')
+        fdate = date[0] + " " + months[parseInt(date[1])] + " " + date[2];
+        return fdate;
+      }
+
+      selected_year = $('#dates-range-form').find('#dt-year').val();
+
+      $.each(dates_range, function(index, item) {
+        if (dates_range[index].year == selected_year) {
+          $.each(dates_range[index].weeks_list, function(index, item) {
+            $('#dates-range-form').find('#dt-week').append(
+              "<option value=" + item.start_date + "," + item.end_date + ">" +
+              "Semana " + item.week_number + ": " +
+              convert_date_to_str(item.start_date) +
+              " - " + convert_date_to_str(item.end_date) +
+              "</option>"
+            );
+          });
+          return false;
+        }
+
+      });
+    }
+
+
     /** 
      * Refresh the page with de dates of the year and week selected
      */
@@ -479,8 +600,81 @@
           console.log(result);
         },
         complete: function(result){
-        }
-      });
+        }      
+
+      });      
+  }
+
+  /** 
+   * Refresh the page with de dates of the year and week selected
+   */
+  $(this).on('click', '#btn-set-new-range', function(event) {
+    dt_year = $('#dt-year').val();
+    dt_week = $('#dt-week').val();
+    $.ajax({
+      url: "{% url 'diners:diners_logs' %}",
+      type: 'POST',
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        'dt_year': dt_year,
+        'dt_week': dt_week,
+        'type': 'diners_logs',
+      },
+      beforeSend: function(){
+        swal({
+          title: "Obteniendo registros",
+          text: "Espere mientras obtenemos toda la información",
+        });
+        swal.enableLoading();
+      },
+      traditional: true,
+      datatype: 'jsonp',
+      success: function(result, status, XHR) {
+        var list_length = result.length;
+        var access_logs_table = $('#access-logs-table').find('tbody');
+        access_logs_table.empty();
+        console.log(result);
+        swal({
+          title: "Éxito",
+          text: "Datos obtenidos",
+          type: "info",
+          timer: 750,
+          showConfirmButton: false
+        }).then(
+        function(){},
+        function(dismiss){}
+        );
+        for (var i = 0; i < list_length; i++) {
+          access_logs_table.append("" +
+            "<tr>" +
+            "<th>" + result[i].rfid + "</th>" +
+            "<td>" + result[i].SAP + "</td>" +
+            "<td>" + result[i].name + "</td>" +
+            "<td>" + result[i].access + "</td>" +
+            "</tr>" +
+          "");
+        };
+
+      },
+      error: function(result, jqXHR, textStatus, errorThrown) {
+        console.log(result);
+      },
+      complete: function(result){
+        // ticket_details = result.responseJSON.ticket_details;
+        // $('.ticket-order-container').find('#ticket-order').text(ticket_details.ticket_order);
+        // setTimeout(function() {
+        //   show_modal(ticket_details)
+        // }, 750);
+
+        // btn_printer.on('click', function(){
+        //   var options = {
+        //     mode: 'iframe',
+        //     popClose: true,
+        //   };
+        //   $("#printer").printArea(options);
+        // });
+      }
+
     });
 
     $(this).on('keyup', '#input-diners-search', function(event) {
@@ -508,48 +702,51 @@
       /**
        * Convert JSON TO CSV
        */
-        var diners_json = null
-        $.ajax({
-          url: "{% url 'diners:diners_logs' %}",
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            type: 'diners_logs',
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-          },
-          beforeSend: function(){
-            swal({
-                title: "Generando Excel",
-                text: "Espere mientras obtenemos toda la información",
-              });
-            swal.enableLoading();
-          },
-          success: function(result, status, XHR) {
-            diner_details = Papa.unparse(result.diner_logs);
-            console.log(diner_details);
+      var diners_json = null;
 
-            var blob = new Blob([ diner_details ], {
-              type: "text/csv;charset=UTF-8" }
-              );
-            var datetime = new Date();
-            saveAs(blob, datetime + '.csv');
+      $.ajax({
+        url: "{% url 'diners:diners_logs' %}",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          type: 'diners_logs',
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        beforeSend: function(){
+          swal({
+              title: "Generando Excel",
+              text: "Espere mientras obtenemos toda la información",
+            });
+          swal.enableLoading();
+        },
+        success: function(result, status, XHR) {
+          console.log(result);
+          diner_details = Papa.unparse(result.diner_logs);
+          console.log(diner_details);
 
-            swal({
-              title: "Éxito",
-              text: "Datos obtenidos",
-              type: "info",
-              timer: 750,
-              showConfirmButton: false
-            }).then(
-              function(){},
-              function(dismiss){}
+          var blob = new Blob([ diner_details ], {
+            type: "text/csv;charset=UTF-8" }
             );
-          },
-          complete: function(result){
-            setTimeout(function() {
-            }, 750);
-          }
-        });
+
+          var datetime = new Date();
+          saveAs(blob, datetime + '.csv');
+
+          swal({
+            title: "Éxito",
+            text: "Datos obtenidos",
+            type: "info",
+            timer: 750,
+            showConfirmButton: false
+          }).then(
+            function(){},
+            function(dismiss){}
+          );
+        },
+        complete: function(result){
+          setTimeout(function() {
+          }, 750);
+        }
+      });
     });
 
     fill_dates_range_form();
