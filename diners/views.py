@@ -371,16 +371,16 @@ def diners_logs(request):
                 access_logs_day_list.append(earnings_sale_object)
             return JsonResponse({'access_logs_day_list': access_logs_day_list})
 
-        if request.POST['type'] == 'diners_logs':
+        elif request.POST['type'] == 'diners_logs':
             diners_objects_list = []
 
             for entry in all_entries:
-                for diner in diners:
-                    if entry.RFID == diner.RFID:
+                for diner in diners:                    
+                    if entry.RFID == diner.RFID:                                                
                         diner_object = {
                             'RFID': entry.RFID,
                             'Hora': entry.access_to_room.time(),
-                            'Fecha': entry.access_to_room.date(),
+                            'Fecha': entry.access_to_room.date(),                                                        
                         }
 
                         diners_objects_list.append(diner_object)
