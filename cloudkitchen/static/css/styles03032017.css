@@ -262,6 +262,7 @@ small {
 }
 .container-diners .diners-id-form .input-group .input-group-addon {
   width: 4em;
+  padding: 0.1em;
 }
 .container-web-logo {
   text-align: center;
@@ -301,7 +302,8 @@ small {
 .container-sales-reports .sales-details .card {
   max-height: 40vh;
 }
-.container-sales-reports .sales-details span.btn-reports {
+.container-sales-reports .sales-details span.btn-reports,
+.container-diners span.btn-reports {
   display: flex;
   justify-content: center;
 }
