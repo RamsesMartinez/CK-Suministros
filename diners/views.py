@@ -374,6 +374,8 @@ def diners_logs(request):
         if request.POST['type'] == 'diners_logs':
             diners_objects_list = []
 
+            numbermap = {'id': 1, 'Nombre': 2, 'RFID': 3, 'SAP': 4, 'Hora de Acceso': 5, 'Fecha de Acceso': 6}
+
             for entry in all_entries:
                 diner_object = {
                     'id': entry.id,
@@ -388,7 +390,9 @@ def diners_logs(request):
                         diner_object['SAP'] = diner.employee_number
                         diner_object['Nombre'] = diner.name
 
-                diners_objects_list.append(diner_object)
+                print([diner_object[i] for i in sorted(diner_object, key=numbermap.__getitem__)])
+
+                diners_objects_list.append([diner_object[i] for i in sorted(diner_object, key=numbermap.__getitem__)])
 
             return JsonResponse({'diner_logs': diners_objects_list})
             
