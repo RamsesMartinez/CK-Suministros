@@ -590,7 +590,10 @@
         },
         success: function(result, status, XHR) {
           console.log(result);
-          diner_details = Papa.unparse(result.diner_logs);
+          diner_details = Papa.unparse({
+            fields: ["id", "Nombre", "RFID", "SAP", "Hora de Acceso", "Fecha de Acceso"],
+            data: result.diner_logs
+          });
           console.log(diner_details);
 
           var blob = new Blob([ diner_details ], {
