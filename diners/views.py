@@ -470,32 +470,6 @@ def diners_logs(request):
                         }
                         year_object['weeks_list'].append(week_object)
 
-
-
-                    #End else
-            years_list.append(year_object)
-            max_year -= 1
-        # End while
-        return json.dumps(years_list)
-
-    pag = diners_paginator(request, all_diners_objects, 50)
-    template = 'diners_logs.html'
-    title = 'Comensales del Dia'
-    page_title = PAGE_TITLE
-
-    context={
-        'title': PAGE_TITLE + ' | ' + title,
-        'page_title': title,
-        'diners' : pag['queryset'],
-        'paginator': pag,
-        'total_diners': total_diners,
-        'total_diners_today': total_diners_today,
-        'diners_hour' : get_diners_per_hour(),
-        'diners_week' : get_diners_actual_week(),
-        'dates_range': get_dates_range(),
-    }
-    return render(request, template, context)    
-
                         # End if
                     else: 
                         """
