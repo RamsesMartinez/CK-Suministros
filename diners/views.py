@@ -420,11 +420,7 @@ def diners_logs(request):
                         diner_object['SAP'] = diner.employee_number
                         diner_object['Nombre'] = diner.name
 
-<<<<<<< HEAD
-=======
-                print([diner_object[i] for i in sorted(diner_object, key=numbermap.__getitem__)])
 
->>>>>>> 0a015a37c9c6a6a565af07743505cb60f3ba0bc2
                 diners_objects_list.append([diner_object[i] for i in sorted(diner_object, key=numbermap.__getitem__)])
 
             return JsonResponse({'diner_logs': diners_objects_list})
@@ -457,6 +453,12 @@ def diners_logs(request):
                     'weeks_list' : []
                 }
 
+
+
+
+
+                
+
                 diners_per_year = all_diners_objects.filter(
                     access_to_room__range=[naive_to_datetime(date(max_year,1,1)),naive_to_datetime(date(max_year,12,31))])
                 
@@ -472,6 +474,7 @@ def diners_logs(request):
                             'end_date': diner.access_to_room.date().strftime("%d-%m-%Y"),
                         }
                         year_object['weeks_list'].append(week_object)
+
 
 
                     #End else
