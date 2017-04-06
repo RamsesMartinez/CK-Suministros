@@ -147,18 +147,21 @@ def get_diners_per_hour():
     logs = get_access_logs_today()
 
     while start_hour <= hours_to_count:
-
         hour = {            
             'count': None,
         }
-
-        for log in logs:
-            datetime = str(log.access_to_room)
-            date,time = datetime.split(" ")    
-            if(time.startswith("0"+str(start_hour))):
+        for log in logs:            
+            datetime = str(log.access_to_room)            
+            print(datetime)
+            date,time = datetime.split(" ")   
+            if(time.startswith("0")):
+                hour_str = "0"+str(start_hour)
+            else:
+                hour_str = str(start_hour)   
+            if(time.startswith(hour_str)):                
                 customter_count += 1 
             hour['count'] = customter_count
-
+            
         hours_list.append(hour)        
         customter_count = 0
         start_hour += 1
@@ -403,6 +406,7 @@ def diners_logs(request):
             numbermap = {'id': 1, 'Nombre': 2, 'RFID': 3, 'SAP': 4, 'Hora de Acceso': 5, 'Fecha de Acceso': 6}
 
             for entry in all_entries:
+
                 diner_object = {
                     'id': entry.id,
                     'Nombre': '',
@@ -416,6 +420,11 @@ def diners_logs(request):
                         diner_object['SAP'] = diner.employee_number
                         diner_object['Nombre'] = diner.name
 
+<<<<<<< HEAD
+=======
+                print([diner_object[i] for i in sorted(diner_object, key=numbermap.__getitem__)])
+
+>>>>>>> 0a015a37c9c6a6a565af07743505cb60f3ba0bc2
                 diners_objects_list.append([diner_object[i] for i in sorted(diner_object, key=numbermap.__getitem__)])
 
             return JsonResponse({'diner_logs': diners_objects_list})
@@ -463,6 +472,31 @@ def diners_logs(request):
                             'end_date': diner.access_to_room.date().strftime("%d-%m-%Y"),
                         }
                         year_object['weeks_list'].append(week_object)
+
+
+                    #End else
+            years_list.append(year_object)
+            max_year -= 1
+        # End while
+        return json.dumps(years_list)
+
+    pag = diners_paginator(request, all_diners_objects, 50)
+    template = 'diners_logs.html'
+    title = 'Comensales del Dia'
+    page_title = PAGE_TITLE
+
+    context={
+        'title': PAGE_TITLE + ' | ' + title,
+        'page_title': title,
+        'diners' : pag['queryset'],
+        'paginator': pag,
+        'total_diners': total_diners,
+        'total_diners_today': total_diners_today,
+        'diners_hour' : get_diners_per_hour(),
+        'diners_week' : get_diners_actual_week(),
+        'dates_range': get_dates_range(),
+    }
+    return render(request, template, context)    
 
                         # End if
                     else: 
