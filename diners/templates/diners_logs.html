@@ -783,21 +783,12 @@
           swal.enableLoading();
         },
         success: function(result, status, XHR) {
-          console.log(result);
+          
           diner_details = Papa.unparse({
-<<<<<<< HEAD
-            fields: ["id", "Nombre", "RFID", "SAP", "Hora de Acceso", "Fecha de Acceso"],
-            data: result.diner_logs
-          });
-          console.log(diner_details);
-=======
               fields: ["Id", "Nombre", "RFID", "SAP", "Hora de Acceso", "Fecha de Acceso"],
               data: result.diner_logs
           });
-
-          console.log(result.diner_logs);
->>>>>>> 0a015a37c9c6a6a565af07743505cb60f3ba0bc2
-
+          
           var blob = new Blob([ diner_details ], {
             type: "text/csv;charset=UTF-8" }
             );

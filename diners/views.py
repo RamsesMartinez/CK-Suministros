@@ -452,11 +452,6 @@ def diners_logs(request):
                     'year' : max_year,
                     'weeks_list' : []
                 }
-
-
-
-
-
                 
 
                 diners_per_year = all_diners_objects.filter(
